@@ -1,0 +1,18 @@
+.hero-section {
+    background: linear-gradient(135deg, rgba(23, 39, 80, 0.9), rgba(47, 62, 115, 0.9));
+    background-size: cover;
+    background-position: center;
+    padding: 6rem 1rem;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .hero-section:hover {
+      background: linear-gradient(135deg, rgb(33, 53, 105), rgb(51, 68, 129));
+  }
+  
+  .icon-square {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+  }
+  

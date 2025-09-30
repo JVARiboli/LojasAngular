@@ -1,0 +1,108 @@
+<h2 class="mb-3">Produtos</h2>
+
+@if (loading) {<div class="alert alert-info">Carregando...</div>}
+@if (erro) {<div class="alert alert-danger">{{ erro }}</div>}
+@if (sucesso) {<div class="alert alert-success">{{ sucesso }}</div>}
+
+<div class="card mb-4">
+  <div class="card-header">
+    <h3>Cadastrar Novo Produto</h3>
+  </div>
+  <div class="card-body">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label for="nomeProduto" class="form-label">Nome do Produto</label>
+        <input id="nomeProduto" class="form-control" [(ngModel)]="novoProduto.nome">
+      </div>
+      <div class="col-md-4">
+        <label for="precoProduto" class="form-label">Preço</label>
+        <input id="precoProduto" class="form-control" type="number" [(ngModel)]="novoProduto.preco">
+      </div>
+      <div class="col-md-4">
+        <label for="lojaProduto" class="form-label">Loja</label>
+        <select id="lojaProduto" class="form-select" [(ngModel)]="novoProduto.lojaId">
+          <option [ngValue]="undefined" disabled>Selecione uma loja</option>
+          @for(loja of lojas; track loja.id) {
+            <option [value]="loja.id">{{ loja.nome }}</option>
+          }
+        </select>
+      </div>
+      <div class="col-12">
+        <label for="descricaoProduto" class="form-label">Descrição</label>
+        <textarea id="descricaoProduto" class="form-control" [(ngModel)]="novoProduto.descricao"></textarea>
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary" (click)="adicionar()">Adicionar Produto</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h4>Produtos Cadastrados</h4>
+<ul class="list-group">
+  @for (p of produtos; track p.id) {
+    <li class="list-group-item">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <strong>{{ p.nome }}</strong> - {{ 'R$ ' + p.preco.toFixed(2) }}
+          <br>
+          <small class="text-muted">{{ p.descricao }}</small>
+          @if(p.lojaModel) {
+            <br>
+            <span class="badge bg-secondary">{{ p.lojaModel.nome }}</span>
+          }
+        </div>
+        <div class="btn-group btn-group gap-2">
+          <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" (click)="iniciarEdicao(p)">
+            Editar
+          </button>
+          <button class="btn btn-sm btn-outline-danger" (click)="remover(p.id)">
+            Remover
+          </button>
+        </div>
+      </div>
+    </li>
+  } @empty {
+    <li class="list-group-item text-center">Nenhum produto cadastrado.</li>
+  }
+</ul>
+
+<div class="modal fade" id="editModal" tabindex="-1">
+  <div class="modal-dialog">
+    @if (editarItem) {
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Editar Produto</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-2">
+            <label class="form-label">Nome</label>
+            <input class="form-control" [(ngModel)]="editarItem.nome">
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Preço</label>
+            <input class="form-control" [(ngModel)]="editarItem.preco" type="number">
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Descrição</label>
+            <textarea class="form-control" [(ngModel)]="editarItem.descricao"></textarea>
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Loja</label>
+            <select class="form-select" [(ngModel)]="editarItem.lojaId">
+              <option [ngValue]="undefined" disabled>Selecione uma loja</option>
+              @for(loja of lojas; track loja.id) {
+                <option [value]="loja.id">{{ loja.nome }}</option>
+              }
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button class="btn btn-primary" (click)="salvarEdicao()" data-bs-dismiss="modal">Salvar</button>
+        </div>
+      </div>
+    }
+  </div>
+</div>
